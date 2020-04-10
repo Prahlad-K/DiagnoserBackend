@@ -54,7 +54,7 @@ warnings.filterwarnings('ignore')
 
 mod = Blueprint('backend',__name__,template_folder='templates',static_folder='./static')
 UPLOAD_URL = 'http://localhost:5000/static/'
-model = load_model(os.getcwd() + '/modules/static/models/model_glove_lstm_b.h5')
+model = load_model(os.getcwd() + '/DiagnoserBackend/modules/static/models/model_glove_lstm_b.h5')
 
 @mod.route('/')
 def home():
@@ -73,7 +73,7 @@ def predict():
             return "file name not found ..."
 
         else:
-            path = os.path.join(os.getcwd()+'/modules/static/transcripts/'+user_file.filename)
+            path = os.path.join(os.getcwd()+'/DiagnoserBackend/modules/static/transcripts/'+user_file.filename)
             user_file.save(path)
 
             user_file.seek(0)
@@ -153,7 +153,7 @@ import nltk
 nltk.download('wordnet')
 nltk.download('stopwords')
 
-data_path = os.getcwd() + "/modules/transcripts/"
+data_path = os.getcwd() + "/DiagnoserBackend/modules/static/transcripts/"
 #transcripts_to_dataframe(data_path)
 all_participants = pd.read_csv(data_path + 'all.csv', sep=',')
 
