@@ -54,7 +54,7 @@ warnings.filterwarnings('ignore')
 
 mod = Blueprint('backend',__name__,template_folder='templates',static_folder='./static')
 UPLOAD_URL = 'http://localhost:5000/static/'
-model = load_model(os.getcwd() + 'modules/static/models/model_glove_lstm_b.h5')
+model = load_model(os.getcwd() + '/modules/static/models/model_glove_lstm_b.h5')
 
 @mod.route('/')
 def home():
