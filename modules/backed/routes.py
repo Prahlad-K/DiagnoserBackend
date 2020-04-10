@@ -10,7 +10,6 @@ from keras.applications.resnet50 import ResNet50,decode_predictions,preprocess_i
 from datetime import datetime
 import io
 from flask import Flask,Blueprint,request,render_template,jsonify
-from modules.dataBase import collection as db
 
 import matplotlib.pyplot as plt
 import os
@@ -64,21 +63,21 @@ def home():
     return render_template('index.html')
 
 @mod.route('/predict' ,methods=['POST'])
-def predict():  
+def predict():
      if request.method == 'POST':
         # check if the post request has the file part
         if 'file' not in request.files:
            return "someting went wrong 1"
-      
+
         user_file = request.files['file']
         temp = request.files['file']
         if user_file.filename == '':
-            return "file name not found ..." 
-       
+            return "file name not found ..."
+
         else:
             path = os.path.join(os.getcwd()+'/modules/static/transcripts/'+user_file.filename)
             user_file.save(path)
-        
+
             user_file.seek(0)
             transcript = str(user_file.read())
             print(transcript)
@@ -90,9 +89,9 @@ WINDOWS_SIZE = 10
 labels=['none','mild','moderate','moderately severe', 'severe']
 num_classes = len(labels)
 
-def text_to_wordlist(text, remove_stopwords=True, stem_words=False):    
+def text_to_wordlist(text, remove_stopwords=True, stem_words=False):
     # Clean the text, with the option to remove stopwords and to stem words.
-    
+
     # Convert words to lower case and split them
     text = text.lower().split()
 
@@ -104,7 +103,7 @@ def text_to_wordlist(text, remove_stopwords=True, stem_words=False):
     else:
         text = [wordnet_lemmatizer.lemmatize(w) for w in text]
         text = [w for w in text if w != "nan" ]
-    
+
     text = " ".join(text)
 
     # Clean the text
@@ -126,10 +125,10 @@ def text_to_wordlist(text, remove_stopwords=True, stem_words=False):
     text = re.sub(r"\+", " + ", text)
     text = re.sub(r"\-", " - ", text)
     text = re.sub(r"\=", " = ", text)
-    
+
     text = re.sub(r"\<", " ", text)
     text = re.sub(r"\>", " ", text)
-    
+
     text = re.sub(r"'", " ", text)
     text = re.sub(r"(\d+)(k)", r"\g<1>000", text)
     text = re.sub(r":", " : ", text)
@@ -141,14 +140,14 @@ def text_to_wordlist(text, remove_stopwords=True, stem_words=False):
     text = re.sub(r"e - mail", "email", text)
     text = re.sub(r"j k", "jk", text)
     text = re.sub(r"\s{2,}", " ", text)
-    
+
     # Optionally, shorten words to their stems
     if stem_words:
         text = text.split()
         stemmer = SnowballStemmer('english')
         stemmed_words = [stemmer.stem(word) for word in text]
         text = " ".join(stemmed_words)
-    
+
     # Return a list of words
     return(text)
 
@@ -157,7 +156,7 @@ nltk.download('wordnet')
 nltk.download('stopwords')
 
 data_path = "/media/prahlad/New Volume/DIAC-WOZ/transcripts/"
-#transcripts_to_dataframe(data_path) 
+#transcripts_to_dataframe(data_path)
 all_participants = pd.read_csv(data_path + 'all.csv', sep=',')
 
 all_participants.columns =  ['index','personId', 'question', 'answer']
@@ -192,28 +191,28 @@ def test_model(text, model):
     size = len(word_tokens)
     test_phrases = []
     for i in range(size):
-        tokens = word_tokens[i:min(i+windows_size,size)]  
+        tokens = word_tokens[i:min(i+windows_size,size)]
         test_phrases.append(tokens)
     sequences_input = test_phrases
     sequences_input =  pad_sequences(sequences_input, value=0, padding="post", maxlen=windows_size)
-    
+
     predicted_classes = []
     for sequence in sequences_input:
         input_a = np.asarray([sequence])
         pred = model.predict(input_a, batch_size=None, verbose=0, steps=None)
         predicted_classes.append(np.argmax(pred))
-        
+
     predicted_class = statistics.mode(predicted_classes)
     return labels[predicted_class]
-            
-
-   
 
 
 
 
-            
-           
-          
+
+
+
+
+
+
 
 
