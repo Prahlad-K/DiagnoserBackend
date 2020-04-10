@@ -18,7 +18,6 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 
-import gensim
 import json
 
 import nltk
@@ -47,7 +46,6 @@ import fnmatch
 import warnings
 
 import string
-from pathlib import Path
 from random import shuffle
 from ast import literal_eval
 import statistics
@@ -56,7 +54,7 @@ warnings.filterwarnings('ignore')
 
 mod = Blueprint('backend',__name__,template_folder='templates',static_folder='./static')
 UPLOAD_URL = 'http://localhost:5000/static/'
-model = load_model('/media/prahlad/New Volume/DIAC-WOZ/model_glove_lstm_b.h5')
+model = load_model(os.getcwd() + 'modules/static/models/model_glove_lstm_b.h5')
 
 @mod.route('/')
 def home():
@@ -155,7 +153,7 @@ import nltk
 nltk.download('wordnet')
 nltk.download('stopwords')
 
-data_path = "/media/prahlad/New Volume/DIAC-WOZ/transcripts/"
+data_path = os.getcwd() + "/modules/transcripts/"
 #transcripts_to_dataframe(data_path)
 all_participants = pd.read_csv(data_path + 'all.csv', sep=',')
 
