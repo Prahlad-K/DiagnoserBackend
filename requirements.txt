@@ -3,7 +3,7 @@
 # DiagnoserBackend/modules/__init__.py: 1
 # DiagnoserBackend/modules/api/routes.py: 1
 # DiagnoserBackend/modules/backed/routes.py: 12
-Flask == 1.1.1
+Flask == 2.3.2
 
 # DiagnoserBackend/modules/backed/routes.py: 43,44
 Keras == 2.3.1
